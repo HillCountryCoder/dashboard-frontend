@@ -1,11 +1,14 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { Button } from "./components/ui/button";
+import { SignUp } from "./components/SignUp/signUp";
 
 function App() {
   return (
-    <>
-      <Button>Hello from HCC</Button>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/register" element={<SignUp />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
