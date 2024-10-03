@@ -4,11 +4,13 @@ import { SignUp } from "./components/SignUp/signUp";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/register" element={<SignUp />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="h-full flex">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/register" element={<SignUp />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
