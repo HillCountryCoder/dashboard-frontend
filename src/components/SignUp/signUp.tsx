@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Loader2 } from "lucide-react";
 
 // Define the Zod schema for validation
 const signUpSchema = z.object({
@@ -34,13 +35,22 @@ export function SignUp() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
+    mode: "onChange",
   });
 
-  const onSubmit = (data: SignUpFormValues) => {
-    console.log(data);
+  const onSubmit = async (data: SignUpFormValues) => {
+    try {
+      // Simulate form submission (e.g., API call)
+      console.log(data);
+      // Add any success feedback here
+    } catch (error) {
+      console.error("Form submission failed", error);
+      // Add error feedback to the user here
+      alert("An error occurred while submitting the form. Please try again.");
+    }
   };
 
   return (
@@ -59,10 +69,14 @@ export function SignUp() {
               <Input
                 id="first-name"
                 placeholder="Max"
+                aria-invalid={errors.firstName ? "true" : "false"}
+                aria-describedby={
+                  errors.firstName ? "first-name-error" : undefined
+                }
                 {...register("firstName")}
               />
               {errors.firstName && (
-                <p className="text-sm text-destructive">
+                <p id="first-name-error" className="text-sm text-destructive">
                   {errors.firstName.message}
                 </p>
               )}
@@ -72,10 +86,14 @@ export function SignUp() {
               <Input
                 id="last-name"
                 placeholder="Robinson"
+                aria-invalid={errors.lastName ? "true" : "false"}
+                aria-describedby={
+                  errors.lastName ? "last-name-error" : undefined
+                }
                 {...register("lastName")}
               />
               {errors.lastName && (
-                <p className="text-sm text-destructive">
+                <p id="last-name-error" className="text-sm text-destructive">
                   {errors.lastName.message}
                 </p>
               )}
@@ -87,22 +105,37 @@ export function SignUp() {
               id="email"
               type="email"
               placeholder="m@example.com"
+              aria-invalid={errors.email ? "true" : "false"}
+              aria-describedby={errors.email ? "email-error" : undefined}
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-sm text-destructive">{errors.email.message}</p>
+              <p id="email-error" className="text-sm text-destructive">
+                {errors.email.message}
+              </p>
             )}
           </div>
           <div className="grid gap-2 text-left">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" {...register("password")} />
+            <Input
+              id="password"
+              type="password"
+              aria-invalid={errors.password ? "true" : "false"}
+              aria-describedby={errors.password ? "password-error" : undefined}
+              {...register("password")}
+            />
             {errors.password && (
-              <p className="text-sm text-destructive">
+              <p id="password-error" className="text-sm text-destructive">
                 {errors.password.message}
               </p>
             )}
           </div>
-          <Button type="submit" className="w-full">
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={!isValid || isSubmitting}
+          >
+            {isSubmitting ?? <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Create an account
           </Button>
         </form>
